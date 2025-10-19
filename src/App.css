@@ -1,0 +1,87 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+
+
+.Profile-card {
+  background-color: white;
+  color: black;
+  border: 2px solid grey;
+  padding: 5px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease-in-out;
+  border-radius: 10px;
+  width: 300px;     
+  height: 420px;  
+}
+
+.Profile-card img {
+  width: 80%;
+  height: 150px;             
+  object-fit: cover;    
+  border-radius: 10px;
+}
+
+.Profile-card:hover {
+  transform: scale(1.1);
+}
+
+.navbar{
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 10;
+  padding: 10px;
+  border: 2px solid #4E2A84;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background-color: #B6ACD1;
+  color: #4E2A84;
+}
+
+.navbar div{
+  cursor: pointer;
+  transition: color 0.1s ease;
+}
+
+.navbar div:hover { 
+  transform: scale(1.1);              
+}
+
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+

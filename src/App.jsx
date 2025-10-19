@@ -3,7 +3,7 @@ import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
 
-
+/* I created the github repo after I finished all my code, so no changes are shown, everthing is newly created. */
 function Profile({src, name, school, major, bio, added, handleAdd}) {
   const bgColor = added? 'green':'grey';
   return(

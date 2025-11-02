@@ -8,6 +8,7 @@ export default function Discover(){
     const [searchedID, setSearched] = useState(null);
     const [inputID, setInputID] = useState("");
     const [loading, setLoading] = useState(false);
+    const API_URL = import.meta.env.VITE_API_URL;
 
 
 
@@ -15,7 +16,7 @@ export default function Discover(){
        const getAllUsers= async() => {
         setLoading(true);
         try{
-            const res = await fetch('https://disc-assignment-5-users-api-iyct.onrender.com/api/users');
+            const res = await fetch(`${API_URL}/api/users`);
             const data = await res.json();
             setProfiles(data);
         }catch(e){
@@ -32,7 +33,7 @@ export default function Discover(){
       const getUserByID = async() => {
         setLoading(true);
         try{
-          const res = await fetch(`https://disc-assignment-5-users-api-iyct.onrender.com/api/users/${searchedID}`);
+          const res = await fetch(`${API_URL}/api/users/${searchedID}`);
           const data = await res.json();
           if (!data || !data.id) {
             alert("User not found!");

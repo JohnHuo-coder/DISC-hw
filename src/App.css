@@ -1,10 +1,94 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
   text-align: center;
 }
 
+.discover-main{
+  width: 100vw;
+  background-color:#836EAA;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 100px 0 50px;
+}
+
+.userprofile-main{
+  width: 100vw;
+  background-color:#836EAA;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 100px 0 50px;
+}
+
+.login-main{
+  width: 100vw;
+  height: 100%;
+  background-color:#836EAA;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 100px 0 50px;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.signup-form{
+  background: white;
+  display: flex; 
+  flex-direction: column; 
+  justify-content: space-around; 
+  width: 20vw;
+  height: 30vw;
+  align-items: flex-start;
+  border: 3px solid grey;
+  border-radius: 10px;
+  padding: 10px 0 0 20px;
+}
+
+.signup-form label {
+  font-weight: 600;
+}
+
+.signup-form input::placeholder {
+  color: #4E2A84; 
+  opacity: 0.7;
+}
+
+.signup-form input,
+.signup-form textarea {
+  background-color:#B6ACD1;
+  color: black;
+  margin-top: 5px;
+  padding: 10px 12px;
+  border: 1px solid grey;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+}
+
+
+.signup-form input:focus,
+.signup-form textarea:focus {
+  outline: none;
+  border-color: #7a5af8;
+  box-shadow: 0 0 10px rgba(122, 90, 248, 0.4);
+}
+
+.signup-form button {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #7a5af8;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.signup-form button:hover {
+  background-color: #6445d8;
+  transform: translateY(-2px);
+}
 
 
 .Profile-card {
@@ -39,6 +123,7 @@
   align-items: center;
   justify-content: space-around;
   width: 100%;
+  height: 1.5vw;
   position: fixed;
   top: 0;
   left: 0;
@@ -46,7 +131,7 @@
   z-index: 10;
   padding: 10px;
   border: 2px solid #4E2A84;
-  font-size: 1.1rem;
+  font-size: 1.3rem;
   font-weight: 500;
   background-color: #B6ACD1;
   color: #4E2A84;
@@ -60,7 +145,6 @@
 .navbar div:hover { 
   transform: scale(1.1);              
 }
-
 
 @keyframes logo-spin {
   from {
@@ -77,11 +161,4 @@
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
 

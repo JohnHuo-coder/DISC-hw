@@ -12,8 +12,12 @@ import UserProfile from './components/UserProfile.jsx';
 import LogIn from './components/Login.jsx';
 import SignUp from './components/SignUp.jsx';
 import SignIn from './components/SignIn.jsx';
+import { supabase } from "../../../backend/src/supabase-client";
+import {Session} from "@supabase/supabase-js"
 
 function App() {
+
+
   return(
   <Router>
     <NavBar />
@@ -25,7 +29,11 @@ function App() {
       </Route>
       <Route path='/friends' element={<Friends />}/>
       <Route path='/groups' element={<Groups />}/>
-      <Route path='/myprofile' element={<MyProfile />}/>
+      <Route path='/myprofile'>
+        <Route index element={<MyProfile />} />  
+        <Route path="edit" element={<Info />} /> 
+      </Route>
+
       <Route path='/settings' element={<Settings />}/>
       <Route path='/login' element={<SignIn />}/>
       <Route path="/signup" element={<SignUp />} /> 

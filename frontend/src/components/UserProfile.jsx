@@ -6,12 +6,13 @@ export default function UserProfile(){
     const [loading, setLoading] = useState(false);
     const [detailedProfile, setDetailedProfile] = useState({});
     const [added, setAdded] = useState(false);
+    const API_URL = import.meta.env.VITE_API_URL;
 
     useEffect(() => {
         const fetchUser = async() => {
             setLoading(true);
             try{
-                const res = await fetch(`https://disc-assignment-5-users-api-iyct.onrender.com/api/users/${id}`);
+                const res = await fetch(`${API_URL}/api/users/${id}`);
                 const data = await res.json();
                 if (!data || !data.id) {
                     alert("User not found!");
@@ -25,7 +26,7 @@ export default function UserProfile(){
             }
         }
         fetchUser();
-    },[])
+    },[id])
     
     if (loading) return <div style={{textAlign: "center"}}><h1>we are loading!!!</h1></div>
 

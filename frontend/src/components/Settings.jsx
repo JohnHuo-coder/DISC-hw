@@ -1,3 +1,15 @@
+import { supabase } from "../../../backend/src/supabase-client";
+
 export default function Settings() {
-  return <h1>Settings Page</h1>;
+  const logOut = aysnc() => {
+    await supabase.auth.signOut();
+  };
+
+
+
+  return (
+    <main>
+        <button onClick = {logOut}>Sign Out</button>
+    </main>
+  );
 }

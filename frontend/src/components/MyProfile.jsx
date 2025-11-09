@@ -1,28 +1,32 @@
 import { Link } from "react-router-dom";
 import {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../backend/src/supabase-client";
 
 export default function MyProfile() {
   const [loading, setLoading] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
+  const [userProfile, setUserProfile] = useState({});
   const navigate = useNavigate();
   const API_URL = import.meta.env.VITE_API_URL;
   
   useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (!storedUser) {
-      navigate("/login"); 
-      return;
+    const checkLogin = async() => {
+      const {data, error} = await supabase.auth.getUser();
+      if (!data){
+        navigate("/login")
+      }
+      setCurrentUser(data.user);
     }
-    const parsedUser = JSON.parse(storedUser);
-    setCurrentUser(parsedUser);
+    checkLogin();
+
 
     const fetchUser = async() => {
       setLoading(true);
       try{
-        const res = await fetch(`${API_URL}/api/users/${parsedUser.id}`)
+        const res = await fetch(`${API_URL}/api/myprofile/${currentUser.id}`)
         const data = await res.json();
-        setCurrentUser(data);
+        setUserProfile(data);
       }catch(e){
         console.log("Error fetching user:", e);
       }finally{
@@ -38,12 +42,13 @@ export default function MyProfile() {
   return(
     <main className = "userprofile-main">
       <div style={{display: "flex", flexDirection: "column", alignItems: 'center'}}>
-        <img src={currentUser.profilePicture} alt="picture" style={{ width: "100%", maxWidth: "250px", height: "auto", borderRadius: "10px"}}/>
-        <h3>{currentUser.firstName} {currentUser.lastName}</h3>
-        <span>{currentUser.email}</span>
-        <span>{currentUser.major}</span>
-        <span>{currentUser.graduationYear}</span>
-        <p>{currentUser.bio}</p>
+        <img src={userProfile.profilePicture} alt="picture" style={{ width: "100%", maxWidth: "250px", height: "auto", borderRadius: "10px"}}/>
+        <h3>{userProfile.firstName || "no first name provided"} {userProfile.lastName || "no last name provided"}</h3>
+        <span>{userProfile.email}</span>
+        <span>{userProfile.major || "no major provided"}</span>
+        <span>{userProfile.graduationYear || "no graduation year provided"}</span>
+        <p>{userProfile.bio || "say something about yourself!"}</p>
+        <Link to={`/discover/edit`}>Edit my profile</Link>
       </div>
     </main>
   )

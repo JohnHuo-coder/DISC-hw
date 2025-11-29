@@ -33,11 +33,11 @@ export default function UserProfile(){
     return(
         <main className = "userprofile-main">
             <div style={{display: "flex", flexDirection: "column", alignItems: 'center'}}>
-                <img src={detailedProfile.profilePicture} alt="picture" style={{ width: "100%", maxWidth: "250px", height: "auto", borderRadius: "10px"}}/>
-                <h3>{detailedProfile.firstName} {detailedProfile.lastName}</h3>
+                <img src={detailedProfile.profile_picture} alt="picture" style={{ width: "100%", maxWidth: "250px", height: "auto", borderRadius: "10px"}}/>
+                <h3>{detailedProfile.first_name} {detailedProfile.last_name}</h3>
                 <span>{detailedProfile.email}</span>
                 <span>{detailedProfile.major}</span>
-                <span>{detailedProfile.graduationYear}</span>
+                <span>{detailedProfile.graduation_year}</span>
                 <p>{detailedProfile.bio}</p>
                 <button style={{backgroundColor: added? "green" : "grey"}} onClick={() => setAdded(!added)}>{added? "✔":"add"}</button>
             </div>

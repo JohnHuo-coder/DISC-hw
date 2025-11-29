@@ -1,11 +1,10 @@
-import{useEffect, useState} from "react";
+import {useState, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../../backend/src/supabase-client";
+import { useAuth } from "./AuthContext";
 
 
 export default function Info(){
 
-    const [currentUser, setCurrentUser] = useState({});
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [bio, setBio] = useState("");
@@ -16,24 +15,19 @@ export default function Info(){
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL;
 
+    const { user, loading } = useAuth();
     useEffect(() => {
-        const checkLogin = async() => {
-        const {data, error} = await supabase.auth.getUser();
-        if (!data){
-            navigate("/login")
-        }
-        setCurrentUser(data.user);
-        }
-        checkLogin();
-    },[])
+        if (!loading && !user){
+        navigate('/login', { replace: true });
+    }}, [user, loading])
 
-
-    const updateProfile= async(e)=>{
+    const updateProfile = async(e)=>{
         e.preventDefault();
         try{
-            const res = await fetch(`${API_URL}/api/myprofile/edit/${currentUser.id}`,{
+            const res = await fetch(`${API_URL}/api/myprofile/edit`,{
             method: "PUT", 
             headers: {'Content-Type': 'application/json'},
+            credentials: "include",
             body: JSON.stringify({
                 firstName: firstName,
                 lastName: lastName,
@@ -48,7 +42,7 @@ export default function Info(){
             return;
         }
         console.log("update successfully", updatedProfile);
-        navigate("/myprofile");
+        navigate("/myprofile", { replace: true });
     }catch(e){
         setError("Network error. Please try again later.");
     }

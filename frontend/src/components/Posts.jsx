@@ -2,79 +2,84 @@ import { useEffect, useState} from "react";
 import {Link} from 'react-router-dom';
  
 
-export default function Discover(){
-    const [newPost, setNewPost] = useState({title: "", description: ""})
+export default function Posts(){
+    const [posts, setPosts] = useState([]);
+    const [postId, setPostId] = useState("");
+    const [searchedId, setSearchedId] = useState("");
     const [loading, setLoading] = useState(false);
     const API_URL = import.meta.env.VITE_API_URL;
 
-
-
     useEffect(() => {
-       const getAllUsers= async() => {
+       const getAllPosts= async() => {
         setLoading(true);
         try{
-            const res = await fetch(`${API_URL}/api/users`);
+            const res = await fetch(`${API_URL}/api/posts`);
             const data = await res.json();
-            setProfiles(data);
+            if (!res.ok){
+              console.error("fail loading posts",data.error);
+              throw new Error(data.error || 'fail loading posts');
+            }
+            setPosts(data);
         }catch(e){
-            console.error("error getting products", e);
+            console.error("error getting posts", e);
         }finally{
           setLoading(false);
         }
        }
-       getAllUsers();
+       getAllPosts();
     },[])
 
     useEffect(() => {
-      if (!searchedID) return;
-      const getUserByID = async() => {
+      if (!searchedId) return;
+      const getPostByID = async() => {
         setLoading(true);
         try{
-          const res = await fetch(`${API_URL}/api/users/${searchedID}`);
+          const res = await fetch(`${API_URL}/api/posts/${searchedId}`);
           const data = await res.json();
-          if (!data || !data.id) {
-            alert("User not found!");
-            setProfiles([]); 
-            return;
+          if (!res.ok){
+            console.error("fail getting post", data.error);
+            throw new Error(data.error || "fail getting post");
           }
-          setProfiles([data]);
+          if (!data || !data.id) {
+            alert("Post not found!");
+            setPosts([]); 
+            return;
+          };
+          setPosts([data]);
         }catch(e){
-          console.log(`error getting user with id: ${searchedID}`);
+          console.error(`error getting user with id: ${searchedId}`, e);
         }finally{
           setLoading(false);
         }
       }
-      getUserByID();
-    },[searchedID])
+      getPostByID();
+    },[searchedId])
 
-    useEffect(() => {
-    document.body.style.backgroundColor = darkMode? "#4E2A84" : "#836EAA";
-    document.body.style.color = darkMode ? 'white' : 'black';
-    },[darkMode]) 
-
-    if (loading) return <div style={{textAlign: "center"}}><h1>we are loading!!!</h1></div>
+    if (loading) return <div style={{textAlign: "center"}}><h1>loading</h1></div>
 
     return (
     <main className="discover-main">
-        <div style={{position: 'fixed', left: 0, top: "3vw", display: 'flex', flexDirection: 'row', justifyContent: 'flex-start'}}>
-          <button style={{margin: 10, backgroundColor: darkMode ? 'grey' : 'lightgrey', color: darkMode ? 'white' : 'black'}}
-          onClick={() => {setDarkMode(!darkMode)}}>Dark Mode</button>
+        <div style={{position: 'fixed', left: 0, top: "3vw", display: 'flex', flexDirection: 'row', justifyContent: 'center'}}>
+          <Link to="/posts/post" style={{margin: 10}}>Post</Link>
         </div>
-        <div style={{marginBottom: 20, display: 'flex', justifyContent: 'center', alignItems: 'center'}}> 
-          <input style={{width: "50%", height: "2rem", padding: 5, backgroundColor: "white", color: 'black', borderRadius: "5px"}} type="text" placeholder="Enter user ID" value={inputID} onChange={(e) => setInputID(e.target.value)}/>
-          <button style={{margin: 10, backgroundColor: "white", color: 'black'}} onClick={() => {setSearched(inputID)}}>Search</button>
+        {/* <div style={{marginBottom: 20, display: 'flex', justifyContent: 'center', alignItems: 'center'}}>  */}
+          {/* <input style={{width: "50%", height: "2rem", padding: 5, backgroundColor: "white", color: 'black', borderRadius: "5px"}} type="text" placeholder="Enter post ID" value={postId} onChange={(e) => setPostId(e.target.value)}/>
+          <button style={{margin: 10, backgroundColor: "white", color: 'black'}} onClick={() => {setSearchedId(postId)}}>Search</button> */}
+        <div className="d-flex justify-content-center mb-5" style={{ width: "100%" }}>
+          <form className="d-flex" role="search" style={{ width: "100%", maxWidth: "700px" }} onSubmit={(e) => {e.preventDefault(); setSearchedId(postId)}}>
+            <input className="form-control me-2" type="search" aria-label="Search" placeholder="Enter post ID" value={postId} onChange={(e) => setPostId(e.target.value)}/>
+            <button className="btn btn-primary" type="submit">Search</button>
+          </form>
         </div>
+        
         <div style={{width: "100%", gap: 50, display: "flex", flexDirection: "row", flexWrap: 'wrap', justifyContent: 'center'}}>
-        {profiles.map((profile) => {
+        {posts.map((post) => {
           return(
-          <div key= {profile.id} className = 'Profile-card'>
-            <img src={profile.profilePicture} alt="picture" />
-            <h3>{profile.firstName} {profile.lastName}</h3>
-            <span>{profile.email}</span>
-            <span>{profile.major}</span>
-            <span>{profile.graduationYear}</span>
-            <p>{profile.bio}</p>
-            <Link to={`/discover/${profile.id}`}>details</Link>
+          <div key= {post.id} className = 'Profile-card'>
+            {post.image_url ? <img src={post.image_url} alt="picture" /> : null}
+            <h3>{post.title}</h3>
+            <p>{post.content}</p>
+            <Link to={`/posts/${post.id}`}>details</Link>
           </div>)
         })}
         </div>

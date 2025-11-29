@@ -6,39 +6,47 @@ import Home from './components/Home.jsx';
 import Friends from './components/Friends.jsx';
 import Groups from './components/Groups.jsx';
 import MyProfile from './components/MyProfile.jsx';
+import Info from './components/Info.jsx';
 import Settings from './components/Settings.jsx';
 import Discover from './components/Discover.jsx';
 import UserProfile from './components/UserProfile.jsx';
-import LogIn from './components/Login.jsx';
+import Posts from './components/Posts.jsx';
+import Post from './components/Post.jsx';
 import SignUp from './components/SignUp.jsx';
 import SignIn from './components/SignIn.jsx';
-import { supabase } from "../../../backend/src/supabase-client";
-import {Session} from "@supabase/supabase-js"
+import { AuthProvider } from './components/AuthContext.jsx';
 
 function App() {
 
 
   return(
-  <Router>
-    <NavBar />
-    <Routes>
-      <Route path='/' element={<Home />}/>
-      <Route path="/discover">
-        <Route index element={<Discover />} />  
-        <Route path=":id" element={<UserProfile />} /> 
-      </Route>
-      <Route path='/friends' element={<Friends />}/>
-      <Route path='/groups' element={<Groups />}/>
-      <Route path='/myprofile'>
-        <Route index element={<MyProfile />} />  
-        <Route path="edit" element={<Info />} /> 
-      </Route>
+    <AuthProvider>
+      <Router>
+        <NavBar />
+        <Routes>
+          <Route path='/' element={<Home />}/>
+          <Route path="/discover">
+            <Route index element={<Discover />} />  
+            <Route path=":id" element={<UserProfile />} /> 
+          </Route>
+          <Route path="/posts">
+            <Route index element={<Posts />} />  
+            <Route path="post" element={<Post />} />
+          </Route>
+          <Route path='/friends' element={<Friends />}/>
+          <Route path='/groups' element={<Groups />}/>
+          <Route path='/myprofile'>
+            <Route index element={<MyProfile />} />  
+            <Route path="edit" element={<Info />} /> 
+          </Route>
 
-      <Route path='/settings' element={<Settings />}/>
-      <Route path='/login' element={<SignIn />}/>
-      <Route path="/signup" element={<SignUp />} /> 
-    </Routes>
-  </Router>)
+          <Route path='/settings' element={<Settings />}/>
+          <Route path='/login' element={<SignIn />}/>
+          <Route path="/signup" element={<SignUp />} /> 
+        </Routes>
+      </Router>
+    </AuthProvider>
+  )
 }
 
 export default App

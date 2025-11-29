@@ -1,7 +1,10 @@
-import{useState, useEffect} from "react";
+import {useState, useEffect, useContext} from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "../../../backend/src/supabase-client";
+import { useAuth } from "./AuthContext";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+
 
 export default function SignIn(){
 
@@ -11,30 +14,15 @@ export default function SignIn(){
     const navigate = useNavigate();
     const API_URL = import.meta.env.VITE_API_URL;
 
-    const [session, setSession] = useState(null)
-    
+    const { user, loading, refreshAuth } = useAuth();
+
     useEffect(() => {
-    const checkLogin = async () => {
-        const { data: { user }, error} = await supabase.auth.getUser();
-        if (user) {
-        navigate('/myprofile');
+        if (!loading && user) {
+            console.log("User logged in. Redirecting...");
+            navigate('/myprofile', { replace: true });
         }
-    };
-    checkLogin();
+    }, [user, loading]);
 
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session);
-        if (_event === 'SIGNED_IN') {
-        navigate('/myprofile');
-        }
-    });
-
-    return () => {
-        data.subscription.unsubscribe();
-    };
-    }, []);
-
-    
     const verifyUser= async(e)=>{
         e.preventDefault();
         try{
@@ -44,26 +32,52 @@ export default function SignIn(){
             body: JSON.stringify({
                 email:email,
                 password:password,
-            })});
-        const data = await res.json();
-        if (!res.ok){
-            setError(data.error || "log in failed")
-            return;
-        }
+            }),
+            credentials: 'include'});
+            const data = await res.json();
+            if (!res.ok){
+                setError(data.error || "log in failed")
+                return;
+            }
+            console.log("Sign-in successful. Refreshing Auth State via /api/auth/me...");
+            refreshAuth();
         }catch(e){
             setError("Network error. Please try again later.");
         }
     };
+    
+    if (loading) {
+        return <main className="login-main"><p>loading...</p></main>;
+    }
 
     return(
         <main className="login-main">
-            <div style={{display: "flex", flexDirection: "column", alignItems: 'center'}}>
-                <form onSubmit={verifyUser} className="signup-form">
-                    <label>Email: <input type="text" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)}/></label>
-                    <label>Password: <input type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)}/></label>
+            <div className="card p-4 rounded-4 shadow" style={{ width: "28rem", backgroundColor: "white" }}>
+                <form onSubmit={verifyUser}> 
+                    <div className="mb-3 text-start">
+                        <label for="InputEmail" className="form-label">Email address</label>
+                        <input type="email" className="form-control" style={{ borderColor: "gray", borderWidth: "2px" }} id="InputEmail" placeholder = "example@email.com" aria-describedby="emailIcon" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                    </div>
+                    <div className="mb-3 text-start">
+                        <label for="InputPassword" className="form-label">Password</label>
+                        <input type="password" className="form-control" style={{ borderColor: "gray", borderWidth: "2px" }} id="InputPassword" value={password} onChange={(e) => setPassword(e.target.value)}/>
+                    </div>
                     {error? <p style={{color: "red"}}>{error}</p> : null}
-                    <button type="submit" style={{alignSelf: "center"}} disabled={!email.trim() || !password.trim()}>Sign In</button>
-                    <p>No account? Please<Link to="/signup">Sign up</Link></p>
+                    <div className="d-flex justify-content-between align-items-center mb-3">
+                        <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="remember"/>
+                        <label class="form-check-label" for="remember">
+                            remember me
+                        </label>
+                        </div>
+                        <Link to="">Forget Password?</Link>
+                    </div>
+                    <p>No account? Please <Link to="/signup">Sign up</Link></p>
+                    <div className="d-grid">
+                        <button type="submit" className="btn" style={{backgroundColor: "#7D5BA6", color: "white"}} disabled={!email.trim() || !password.trim()}>
+                            Sign In
+                        </button>
+                    </div>
                 </form>
             </div>
         </main>

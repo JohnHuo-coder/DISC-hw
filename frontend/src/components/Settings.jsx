@@ -1,15 +1,11 @@
-import { supabase } from "../../../backend/src/supabase-client";
+import { useAuth } from "./AuthContext";
 
 export default function Settings() {
-  const logOut = aysnc() => {
-    await supabase.auth.signOut();
-  };
-
-
+  const { logOut } = useAuth();
 
   return (
     <main>
         <button onClick = {logOut}>Sign Out</button>
     </main>
   );
-}
+};
